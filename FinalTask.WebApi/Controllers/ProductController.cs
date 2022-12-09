@@ -19,13 +19,14 @@ namespace FinalTask.WebApi.Controllers
 
         
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> Get()
         {
             var items = await _productService.GetProductListAsync();
-            return Ok("123");
+            return Ok(items);
         }
 
+        [Authorize(Roles = "User")]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
@@ -33,6 +34,7 @@ namespace FinalTask.WebApi.Controllers
             return Ok(item);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> CreateProduct([FromBody] ProductModel product)
         {
@@ -40,6 +42,7 @@ namespace FinalTask.WebApi.Controllers
             return Ok(product);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProduct(int id, [FromBody] ProductModel product)
         {
@@ -47,6 +50,7 @@ namespace FinalTask.WebApi.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

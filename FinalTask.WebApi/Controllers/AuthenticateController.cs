@@ -46,6 +46,15 @@ namespace FinalTask.WebApi.Controllers
 
         [Authorize]
         [HttpPost]
+        [Route("refresh-token")]
+        public async Task<IActionResult> RefreshToken(RefreshTokenModel tokenModel)
+        {
+            var newTokens = await _authService.RefreshToken(tokenModel);
+            return Ok(newTokens);
+        }
+
+        [Authorize]
+        [HttpPost]
         [Route("revoke/{username}")]
         public async Task<IActionResult> Revoke(string username)
         {

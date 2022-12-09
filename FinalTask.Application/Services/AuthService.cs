@@ -69,7 +69,7 @@ namespace FinalTask.Application.Services
             };
         }
 
-        public async Task<TokenModel> RefreshToken(TokenModel tokenModel)
+        public async Task<TokenModel> RefreshToken(RefreshTokenModel tokenModel)
         {
             string? accessToken = tokenModel.AccessToken;
             string? refreshToken = tokenModel.RefreshToken;
