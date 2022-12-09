@@ -15,7 +15,8 @@ namespace FinalTask.WebApi.Extensions
         public static void RegisterServices(this IServiceCollection services)
         {
             services.AddScoped<IProductService, ProductService>();
-
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<ITokenService, TokenService>();
         }
     }
 }

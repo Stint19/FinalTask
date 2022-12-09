@@ -1,12 +1,12 @@
 ﻿using FinalTask.Application.Dtos;
 using FinalTask.Application.Services.Contracts;
-using FinalTask.Domain.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Runtime.CompilerServices;
 
 namespace FinalTask.WebApi.Controllers
 {
-    [Route("api/product")]
+    [Route("api/[controller]")]
     [ApiController]
     public class ProductController : ControllerBase
     {
@@ -19,10 +19,11 @@ namespace FinalTask.WebApi.Controllers
 
         
         [HttpGet]
-        public async Task<IActionResult> GetProductList()
+        [Authorize]
+        public async Task<IActionResult> Get()
         {
             var items = await _productService.GetProductListAsync();
-            return Ok(items);
+            return Ok("123");
         }
 
         [HttpGet("{id}")]
