@@ -1,6 +1,7 @@
 using FinalTask.Domain.Models.Identity;
 using FinalTask.Infrastucture.Data;
 using FinalTask.WebApi.Extensions;
+using FinalTask.WebApi.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -40,6 +41,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<GlobalExceptionHandler>();
 
 app.UseHttpsRedirection();
 
