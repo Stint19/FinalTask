@@ -38,14 +38,22 @@ namespace FinalTask.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateProduct([FromBody] ProductModel product)
         {
+            if (!ModelState.IsValid)
+            {
+                throw new ArgumentException(string.Join(", ", ModelState.Values.SelectMany(m => m.Errors).Select(e => e.ErrorMessage)));
+            }
             await _productService.CreateProductAsync(product);
-            return Ok(product);
+            return Created("Get", product);
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProduct(int id, [FromBody] ProductModel product)
         {
+            if (!ModelState.IsValid)
+            {
+                throw new ArgumentException(string.Join(", ", ModelState.Values.SelectMany(m => m.Errors).Select(e => e.ErrorMessage)));
+            }
             await _productService.UpdateProductAsync(id, product);
             return NoContent();
         }

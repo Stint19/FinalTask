@@ -5,17 +5,19 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinalTask", "JWTRefreshToken.NET6.0\FinalTask.csproj", "{0AD4B02E-8567-4B30-B752-0239B6165FB0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinalTask.UnitTests", "ApiUnitTests\FinalTask.UnitTests.csproj", "{96203909-CA07-4A38-8616-1277A0C1F0E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinalTaskFake.UnitTests", "ApiUnitTests\FinalTaskFake.UnitTests.csproj", "{96203909-CA07-4A38-8616-1277A0C1F0E8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinalTask.IntegrationTests", "FinalTask.IntegrationTests\FinalTask.IntegrationTests.csproj", "{DF0EDE50-F1A7-4280-93A2-28A0A8DA72CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinalTask.Domain", "FinalTask.Domain\FinalTask.Domain.csproj", "{CD5AB5B4-9F62-4FD5-9F5F-888D5FB60BC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinalTask.Domain", "FinalTask.Domain\FinalTask.Domain.csproj", "{CD5AB5B4-9F62-4FD5-9F5F-888D5FB60BC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinalTask.Infrastucture", "FinalTask.Infrastucture\FinalTask.Infrastucture.csproj", "{2BCB1464-5732-4B44-B9F6-7C9D09D160BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinalTask.Infrastucture", "FinalTask.Infrastucture\FinalTask.Infrastucture.csproj", "{2BCB1464-5732-4B44-B9F6-7C9D09D160BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinalTask.Application", "FinalTask.Application\FinalTask.Application.csproj", "{1AD40D91-3704-4471-966E-443C1A8FF923}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinalTask.Application", "FinalTask.Application\FinalTask.Application.csproj", "{1AD40D91-3704-4471-966E-443C1A8FF923}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinalTask.WebApi", "FinalTask.WebApi\FinalTask.WebApi.csproj", "{D31B6324-72E3-428D-A193-F8500AB41896}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinalTask.WebApi", "FinalTask.WebApi\FinalTask.WebApi.csproj", "{D31B6324-72E3-428D-A193-F8500AB41896}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinalTask.UnitTests", "FinalTask.UnitTests\FinalTask.UnitTests.csproj", "{56C0C9E3-BF0F-471C-9965-23BDBA0BB40B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{D31B6324-72E3-428D-A193-F8500AB41896}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D31B6324-72E3-428D-A193-F8500AB41896}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D31B6324-72E3-428D-A193-F8500AB41896}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56C0C9E3-BF0F-471C-9965-23BDBA0BB40B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56C0C9E3-BF0F-471C-9965-23BDBA0BB40B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56C0C9E3-BF0F-471C-9965-23BDBA0BB40B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56C0C9E3-BF0F-471C-9965-23BDBA0BB40B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
