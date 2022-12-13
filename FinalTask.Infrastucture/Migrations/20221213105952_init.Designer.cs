@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinalTask.Infrastucture.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221208143817_init")]
+    [Migration("20221213105952_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -94,6 +94,23 @@ namespace FinalTask.Infrastucture.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "02174cf0–9412–4cfe-afbf-59f706d72cf6",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "bb5e3f68-ed01-47db-9a6a-d64af0226199",
+                            Email = "asd@asd.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PasswordHash = "AQAAAAIAAYagAAAAEAPmkhQ7FlS2ZQGVGcdn7yTuOhDAmBLwgew57REuOwLGN6HWqWz7OpQitiRY6Lo+jA==",
+                            PhoneNumberConfirmed = false,
+                            RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SecurityStamp = "3d78fc19-ba2e-4497-bbd7-2ede9baa9aec",
+                            TwoFactorEnabled = false,
+                            UserName = "Admin"
+                        });
                 });
 
             modelBuilder.Entity("FinalTask.Domain.Models.Product", b =>
@@ -145,6 +162,23 @@ namespace FinalTask.Infrastucture.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "341743f0-asd2–42de-afbf-59kmkkmk72cf6",
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = "341743f0-asd2–42de-afbf-59kmkkmk72cf7",
+                            Name = "User"
+                        },
+                        new
+                        {
+                            Id = "b7ea3d81-8091-4784-b39d-fc8be4c2b1a5",
+                            Name = "User"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -232,6 +266,18 @@ namespace FinalTask.Infrastucture.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "02174cf0–9412–4cfe-afbf-59f706d72cf6",
+                            RoleId = "341743f0-asd2–42de-afbf-59kmkkmk72cf6"
+                        },
+                        new
+                        {
+                            UserId = "02174cf0–9412–4cfe-afbf-59f706d72cf6",
+                            RoleId = "341743f0-asd2–42de-afbf-59kmkkmk72cf7"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>

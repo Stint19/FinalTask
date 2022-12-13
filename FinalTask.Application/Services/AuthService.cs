@@ -122,11 +122,7 @@ namespace FinalTask.Application.Services
             {
                 throw new RegisterFailedException("User creation failed! Please check user details and try again.");
             }
-
-            if (await _roleManager.RoleExistsAsync(UserRoles.User))
-            {
-                await _userManager.AddToRoleAsync(user, UserRoles.User);
-            }
+            await _userManager.AddToRoleAsync(user, UserRoles.User);
         }
 
         public async Task RegisterAdmin(RegisterModel registerModel)
@@ -149,19 +145,8 @@ namespace FinalTask.Application.Services
                 throw new RegisterFailedException("User creation failed! Please check user details and try again.");
             }
 
-            if (!await _roleManager.RoleExistsAsync(UserRoles.Admin))
-                await _roleManager.CreateAsync(new IdentityRole(UserRoles.Admin));
-            if (!await _roleManager.RoleExistsAsync(UserRoles.User))
-                await _roleManager.CreateAsync(new IdentityRole(UserRoles.User));
-
-            if (await _roleManager.RoleExistsAsync(UserRoles.Admin))
-            {
-                await _userManager.AddToRoleAsync(user, UserRoles.Admin);
-            }
-            if (await _roleManager.RoleExistsAsync(UserRoles.Admin))
-            {
-                await _userManager.AddToRoleAsync(user, UserRoles.User);
-            }
+            await _userManager.AddToRoleAsync(user, UserRoles.Admin);
+            await _userManager.AddToRoleAsync(user, UserRoles.User);
         }
 
         public async Task Revoke(string username)

@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace FinalTask.Infrastucture.Migrations
 {
     /// <inheritdoc />
@@ -171,6 +173,30 @@ namespace FinalTask.Infrastucture.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "341743f0-asd2–42de-afbf-59kmkkmk72cf6", null, "Admin", null },
+                    { "341743f0-asd2–42de-afbf-59kmkkmk72cf7", null, "User", null },
+                    { "b7ea3d81-8091-4784-b39d-fc8be4c2b1a5", null, "User", null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "RefreshToken", "RefreshTokenExpiryTime", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "02174cf0–9412–4cfe-afbf-59f706d72cf6", 0, "bb5e3f68-ed01-47db-9a6a-d64af0226199", "asd@asd.com", false, false, null, null, null, "AQAAAAIAAYagAAAAEAPmkhQ7FlS2ZQGVGcdn7yTuOhDAmBLwgew57REuOwLGN6HWqWz7OpQitiRY6Lo+jA==", null, false, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "3d78fc19-ba2e-4497-bbd7-2ede9baa9aec", false, "Admin" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[,]
+                {
+                    { "341743f0-asd2–42de-afbf-59kmkkmk72cf6", "02174cf0–9412–4cfe-afbf-59f706d72cf6" },
+                    { "341743f0-asd2–42de-afbf-59kmkkmk72cf7", "02174cf0–9412–4cfe-afbf-59f706d72cf6" }
                 });
 
             migrationBuilder.CreateIndex(

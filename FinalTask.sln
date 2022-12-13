@@ -3,10 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinalTask", "JWTRefreshToken.NET6.0\FinalTask.csproj", "{0AD4B02E-8567-4B30-B752-0239B6165FB0}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinalTaskFake.IntegrationTests", "FinalTask.IntegrationTests\FinalTaskFake.IntegrationTests.csproj", "{DF0EDE50-F1A7-4280-93A2-28A0A8DA72CC}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinalTask.Domain", "FinalTask.Domain\FinalTask.Domain.csproj", "{CD5AB5B4-9F62-4FD5-9F5F-888D5FB60BC1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinalTask.Infrastucture", "FinalTask.Infrastucture\FinalTask.Infrastucture.csproj", "{2BCB1464-5732-4B44-B9F6-7C9D09D160BD}"
@@ -17,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinalTask.WebApi", "FinalTa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinalTask.UnitTests", "FinalTask.UnitTests\FinalTask.UnitTests.csproj", "{56C0C9E3-BF0F-471C-9965-23BDBA0BB40B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinalTask.IntegrationTest", "FinalTask.IntegrationTest\FinalTask.IntegrationTest.csproj", "{70368BF2-E92B-409A-B4D4-E0646A3F2A7F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinalTask.IntegrationTest", "FinalTask.IntegrationTest\FinalTask.IntegrationTest.csproj", "{70368BF2-E92B-409A-B4D4-E0646A3F2A7F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,14 +21,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0AD4B02E-8567-4B30-B752-0239B6165FB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0AD4B02E-8567-4B30-B752-0239B6165FB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0AD4B02E-8567-4B30-B752-0239B6165FB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0AD4B02E-8567-4B30-B752-0239B6165FB0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DF0EDE50-F1A7-4280-93A2-28A0A8DA72CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DF0EDE50-F1A7-4280-93A2-28A0A8DA72CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DF0EDE50-F1A7-4280-93A2-28A0A8DA72CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DF0EDE50-F1A7-4280-93A2-28A0A8DA72CC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CD5AB5B4-9F62-4FD5-9F5F-888D5FB60BC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CD5AB5B4-9F62-4FD5-9F5F-888D5FB60BC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD5AB5B4-9F62-4FD5-9F5F-888D5FB60BC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
