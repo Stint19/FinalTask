@@ -13,10 +13,11 @@ namespace FinalTask.Infrastucture.Repositories
             _appDbContext = appDbContext;
         }
 
-        public async Task CreateAsync(Product item)
+        public async Task<int> CreateAsync(Product item)
         {
             await _appDbContext.Products.AddAsync(item);
             await _appDbContext.SaveChangesAsync();
+            return item.Id;
         }
 
         public async Task UpdateAsync(Product item)

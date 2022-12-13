@@ -15,7 +15,7 @@ namespace FinalTask.Application.Services
             _productRepository= productRepository;
         }
 
-        public async Task CreateProductAsync(ProductModel product)
+        public async Task<int> CreateProductAsync(ProductModel product)
         {
             await CheckIfExistsAsync(product);
             var item = new Product
@@ -25,20 +25,20 @@ namespace FinalTask.Application.Services
                 Price = product.Price
             };
 
-            await _productRepository.CreateAsync(item);
+            return await _productRepository.CreateAsync(item);
         }
 
         public async Task DeleteProductAsync(int id)
         {
             var item = await _productRepository.GetByIdAsync(id);
-            CheckIfFound(id, item);
+            await CheckIfFound(id, item);
             await _productRepository.DeleteAsync(item);
         }
 
         public async Task<ProductModel> GetProductByIdAsync(int productId)
         {
             var item = await _productRepository.GetByIdAsync(productId);
-            CheckIfFound(productId, item);
+            await CheckIfFound(productId, item);
             return new ProductModel
             {
                 Name = item.Name,
@@ -57,7 +57,7 @@ namespace FinalTask.Application.Services
         {
             await CheckIfExistsAsync(product);
             var item = await _productRepository.GetByIdAsync(id);
-            CheckIfFound(id, item);
+            await CheckIfFound(id, item);
             item.Name = product.Name;
             item.Description = product.Description;
             item.Price = product.Price;

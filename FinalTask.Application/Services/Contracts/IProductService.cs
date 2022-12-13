@@ -7,7 +7,7 @@ namespace FinalTask.Application.Services.Contracts
     {
         Task<List<Product>> GetProductListAsync();
         Task<ProductModel> GetProductByIdAsync(int productId);
-        Task CreateProductAsync(ProductModel product);
+        Task<int> CreateProductAsync(ProductModel product);
         Task UpdateProductAsync(int id, ProductModel product);
         Task DeleteProductAsync(int id);
     }

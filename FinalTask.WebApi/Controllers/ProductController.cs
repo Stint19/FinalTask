@@ -42,8 +42,8 @@ namespace FinalTask.WebApi.Controllers
             {
                 throw new ArgumentException(string.Join(", ", ModelState.Values.SelectMany(m => m.Errors).Select(e => e.ErrorMessage)));
             }
-            await _productService.CreateProductAsync(product);
-            return Created("Get", product);
+            var result = await _productService.CreateProductAsync(product);
+            return Created("Get", result);
         }
 
         [Authorize(Roles = "Admin")]
