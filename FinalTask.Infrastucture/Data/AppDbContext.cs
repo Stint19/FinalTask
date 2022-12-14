@@ -3,8 +3,6 @@ using FinalTask.Domain.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Reflection.Emit;
 
 namespace FinalTask.Infrastucture.Data
 {

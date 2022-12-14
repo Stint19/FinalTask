@@ -2,12 +2,8 @@ using FinalTask.Domain.Models.Identity;
 using FinalTask.Infrastucture.Data;
 using FinalTask.WebApi.Extensions;
 using FinalTask.WebApi.Middlewares;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +26,6 @@ builder.Services.ConfigureJwtSwagger();
 builder.Services.JwtConfigure(builder.Configuration);
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

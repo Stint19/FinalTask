@@ -3,9 +3,7 @@ using FinalTask.Application.Exceprions;
 using FinalTask.Application.Services;
 using FinalTask.Domain.Models;
 using FinalTask.Infrastucture.Contracts;
-using Microsoft.AspNetCore.Routing;
 using Moq;
-using System;
 
 namespace FinalTask.UnitTests
 {
@@ -187,7 +185,7 @@ namespace FinalTask.UnitTests
         }
 
         [Fact]
-        public void DeleteProblemAsync_ShouldReturnModelNotFoundException_WithInvalidId()
+        public void DeleteProductAsync_ShouldReturnModelNotFoundException_WithInvalidId()
         {
             // Arrange
             var productRepository = new Mock<IProductRepository>();

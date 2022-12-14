@@ -74,8 +74,8 @@ namespace FinalTask.Application.Services
 
         private async Task CheckIfExistsAsync(ProductModel model)
         {
-            var bicycle = await _productRepository.GetByNameAsync(model.Name);
-            if (bicycle != null)
+            var product = await _productRepository.GetByNameAsync(model.Name);
+            if (product != null)
             {
                 throw new ArgumentException("This product already exist.");
             }

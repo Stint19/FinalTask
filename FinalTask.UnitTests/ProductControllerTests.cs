@@ -141,7 +141,7 @@ namespace FinalTask.UnitTests
         }
 
         [Fact]
-        public async Task UpdateProblem_ShouldReturnNoContent_WithValidObject()
+        public async Task UpdateProduct_ShouldReturnNoContent_WithValidObject()
         {
             // Arrange
             var productService = new Mock<IProductService>();
@@ -158,7 +158,7 @@ namespace FinalTask.UnitTests
         }
 
         [Fact]
-        public async Task UpdateProblem_ShouldThrowArgumentException_WithInvalidObject()
+        public async Task UpdateProduct_ShouldThrowArgumentException_WithInvalidObject()
         {
             // Arrange
             var controller = new ProductController(null);
@@ -172,7 +172,7 @@ namespace FinalTask.UnitTests
         }
 
         [Fact]
-        public async Task UpdateProblem_ShouldThrowModelNotFoundException_WithInvalidId()
+        public async Task UpdateProduct_ShouldThrowModelNotFoundException_WithInvalidId()
         {
             // Arrange
             var productService = new Mock<IProductService>();
@@ -206,7 +206,7 @@ namespace FinalTask.UnitTests
         }
 
         [Fact]
-        public async Task DeleteProblem_ShouldReturnModelNotFoundException_WithInvalidId()
+        public async Task DeletePrduct_ShouldReturnModelNotFoundException_WithInvalidId()
         {
             // Arrange
             var productService = new Mock<IProductService>();

@@ -29,7 +29,6 @@ namespace FinalTask.IntegrationTest
                 AllowAutoRedirect = false
             });
 
-            //Authorization to set header.
             var user = new
             {
                 userName = "Admin",
@@ -218,7 +217,7 @@ namespace FinalTask.IntegrationTest
         }
 
         [Fact]
-        public async Task UpdateProblem_ShouldReturnNotFound_WithInvalidProblemId()
+        public async Task UpdateProduct_ShouldReturnNotFound_WithInvalidId()
         {
             // Arrange
             var productId = 11111111;

@@ -24,9 +24,6 @@ namespace FinalTask.IntegrationTest
                 {
                     options.UseInMemoryDatabase("InMemoryDb");
                 });
-                //services.AddIdentity<AppUser, IdentityRole>()
-                //.AddEntityFrameworkStores<AppDbContext>()
-                //.AddDefaultTokenProviders();
 
                 var sp = services.BuildServiceProvider();
 
