@@ -8,8 +8,10 @@ namespace FinalTask.Application.Mapper
     {
         public MapProfiles()
         {
-            CreateMap<ProductModel, Product>();
-            CreateMap<Product, ProductModel>().ReverseMap();
+            CreateMap<ProductModel, Product>()
+                .ForMember(c => c.Id,
+                opt => opt.Ignore());
+            CreateMap<Product, ProductModel>();
         }
     }
 }

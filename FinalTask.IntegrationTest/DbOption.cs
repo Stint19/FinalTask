@@ -34,6 +34,13 @@ namespace FinalTask.IntegrationTest
             
         }
 
+        public static async void ReInitialize(AppDbContext db)
+        {
+            var products = GetSeedProduct();
+            db.Products.RemoveRange(products);
+            db.Products.AddRange(products);        
+        }
+
         public static Product[] GetSeedProduct()
         {
             return new Product[]

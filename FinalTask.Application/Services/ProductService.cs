@@ -27,10 +27,11 @@ namespace FinalTask.Application.Services
             }
 
             var item = _mapper.Map<Product>(productModel);
-            var creatingItemId = await _productRepository.CreateAsync(item);
+            await _productRepository.CreateAsync(item);
             await _productRepository.SaveAsync();
-            Task.WaitAll();
-            return creatingItemId;
+
+            var creatingItem = await _productRepository.GetByNameAsync(item.Name);
+            return creatingItem.Id;
         }
 
         public async Task DeleteProductAsync(int id)

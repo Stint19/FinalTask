@@ -10,7 +10,13 @@ using Moq;
 namespace FinalTask.UnitTests
 {
     public class ProductControllerTests
-    {   
+    {
+        private readonly Mock<IProductService> _productService;
+
+        public ProductControllerTests()
+        {
+            _productService = new Mock<IProductService>();
+        }
 
         private List<Product> GetFakeProducts()
         {
@@ -37,11 +43,10 @@ namespace FinalTask.UnitTests
         public async Task GetProductList_ShouldReturnOk_WithData()
         {
             //Arrange
-            var productService = new Mock<IProductService>();
-            productService.Setup(c => c.GetProductListAsync())
-                .Returns(Task.FromResult(GetFakeProducts()));
+            _productService.Setup(c => c.GetProductListAsync())
+                .ReturnsAsync(GetFakeProducts());
 
-            var controller = new ProductController(productService.Object);
+            var controller = new ProductController(_productService.Object);
 
             //Act
             var response = await controller.Get();
@@ -211,7 +216,7 @@ namespace FinalTask.UnitTests
             // Arrange
             var productService = new Mock<IProductService>();
             productService.Setup(r => r.DeleteProductAsync(It.IsAny<int>()))
-                .Throws<ModelNotFoundException>();
+                .Throws<EntityNotFoundException>();
 
             var controller = new ProductController(productService.Object);
 
@@ -219,7 +224,7 @@ namespace FinalTask.UnitTests
             Func<Task> act = async () => await controller.Delete(6);
 
             // Assert
-            await act.Should().ThrowAsync<ModelNotFoundException>();
+            await act.Should().ThrowAsync<EntityNotFoundException>();
         }
     }
 }

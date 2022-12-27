@@ -55,42 +55,44 @@ namespace FinalTask.IntegrationTest
 
             var responseString = await response.Content.ReadAsStringAsync();
             var responseProductList = JsonConvert.DeserializeObject<List<Product>>(responseString);
-            var products = DbOption.GetSeedUsers().ToList();
 
             responseProductList.Should().NotBeNullOrEmpty();
             
         }
 
         [Fact]
-        public async Task GetProduct_ShouldReturnOk_WithValidId()
+        public async Task GetProduct_WithValidId_ShouldReturnOk()
         {
             // Arrange
-            var response = await _client.GetAsync("api/Product");
-            var responseString = await response.Content.ReadAsStringAsync();
-            var responseProduct = JsonConvert.DeserializeObject<List<Product>>(responseString)[0];
-            var productId = responseProduct.Id;
+
+            var productModel = new ProductModel
+            {
+                Name = "Test55456456",
+                Description = "Description",
+                Price = 777
+            };
+            var productJson = JsonConvert.SerializeObject(productModel);
+            var data = new StringContent(productJson, Encoding.UTF8, "application/json");
+            var productPost = await _client.PostAsync("api/Product", data);
+            var responseString = await productPost.Content.ReadAsStringAsync();
+            var productId = JsonConvert.DeserializeObject<int>(responseString);
 
             // Act
-            response = await _client.GetAsync("api/Product/" + productId);
+            var response = await _client.GetAsync("api/Product/" + productId);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             responseString = await response.Content.ReadAsStringAsync();
             responseString.Should().NotBeNull(responseString);
-            var product = JsonConvert.DeserializeObject<ProductModel>(responseString);
-            product.Should().BeEquivalentTo(new ProductModel
-            {
-                Name = responseProduct.Name,
-                Description = responseProduct.Description,
-                Price = responseProduct.Price
-            });
+            var result = JsonConvert.DeserializeObject<ProductModel>(responseString);
+            result.Should().BeEquivalentTo(productModel);
         }
 
         [Fact]
-        public async Task GetProduct_ShouldReturnNotFound_WithInvalidId()
+        public async Task GetProduct_WithInvalidId_ShouldReturnNotFound()
         {
             // Arrange
-            var productId = 55;
+            var productId = 100500;
 
             // Act
             var response = await _client.GetAsync("api/Product/" + productId);
@@ -100,7 +102,7 @@ namespace FinalTask.IntegrationTest
         }
 
         [Fact]
-        public async Task CreateProduct_ShouldReturnOk_WithValidObject()
+        public async Task CreateProduct_WithValidObject_ShouldReturnOk()
         {
             // Arrange
 
@@ -126,16 +128,11 @@ namespace FinalTask.IntegrationTest
             var productResponse = JsonConvert.DeserializeObject<ProductModel>(responseString);
 
             productResponse.Should().NotBeNull();
-            using (new AssertionScope())
-            {
-                productResponse.Name.Should().Be(product.Name);
-                productResponse.Description.Should().Be(product.Description);
-                productResponse.Price.Should().Be(product.Price);
-            }
+            productResponse.Should().BeEquivalentTo(product);
         }
 
         [Fact]
-        public async Task CreateProduct_ShouldReturnBadRequest_WithInvalidObject()
+        public async Task CreateProduct_WithInvalidObject_ShouldReturnBadRequest()
         {
             // Arrange
             var problem = new ProductModel();
@@ -150,7 +147,7 @@ namespace FinalTask.IntegrationTest
         }
 
         [Fact]
-        public async Task DeleteProduct_ShouldReturnNoContent_WithValidId()
+        public async Task DeleteProduct_WithValidId_ShouldReturnNoContent()
         {
             // Arrange
             var response = await _client.GetAsync("api/Product");
@@ -169,7 +166,7 @@ namespace FinalTask.IntegrationTest
         }
 
         [Fact]
-        public async Task DeleteProduct_ShouldReturnModelNotFound_WithInvalidId()
+        public async Task DeleteProduct_WithInvalidId_ShouldReturnModelNotFound()
         {
             // Arrange
             var problemId = 777;
@@ -182,7 +179,7 @@ namespace FinalTask.IntegrationTest
         }
 
         [Fact]
-        public async Task UpdateProduct_ShouldReturnNoContent_WithValidObject()
+        public async Task UpdateProduct_WithValidObject_ShouldReturnNoContent()
         {
             // Arrange
 
@@ -217,7 +214,7 @@ namespace FinalTask.IntegrationTest
         }
 
         [Fact]
-        public async Task UpdateProduct_ShouldReturnNotFound_WithInvalidId()
+        public async Task UpdateProduct_WithInvalidId_ShouldReturnNotFound()
         {
             // Arrange
             var productId = 11111111;

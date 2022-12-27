@@ -15,8 +15,8 @@ namespace FinalTask.Infrastucture.Repositories
 
         public async Task<int> CreateAsync(Product item)
         {
-            await _appDbContext.Products.AddAsync(item);
-            return item.Id;
+            var result = await _appDbContext.Products.AddAsync(item);
+            return result.Entity.Id;
         }
 
         public async Task UpdateAsync(Product item)
