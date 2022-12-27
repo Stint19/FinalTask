@@ -13,5 +13,11 @@
         {
 
         }
+
+        public EntityNotFoundException()
+            : base($"Entity was not found!") 
+        {
+
+        }
     }
 }

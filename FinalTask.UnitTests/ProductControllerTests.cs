@@ -40,7 +40,7 @@ namespace FinalTask.UnitTests
         }
 
         [Fact]
-        public async Task GetProductList_ShouldReturnOk_WithData()
+        public async Task GetProductList_WithData_ShouldReturnOk()
         {
             //Arrange
             _productService.Setup(c => c.GetProductListAsync())
@@ -64,13 +64,12 @@ namespace FinalTask.UnitTests
         }
 
         [Fact]
-        public async Task GetProduct_ShouldReturnOk_WithValidId()
+        public async Task GetProduct_WithValidId_ShouldReturnOk()
         {
             //Arrange
             var id = 1;
             var product = GetFakeProducts().Single(x => x.Id == id);
-            var productService = new Mock<IProductService>();
-            productService.Setup(c => c.GetProductByIdAsync(id))
+            _productService.Setup(c => c.GetProductByIdAsync(id))
                 .Returns(Task.FromResult(new ProductModel
                 {
                     Name= product.Name,
@@ -78,7 +77,7 @@ namespace FinalTask.UnitTests
                     Price= product.Price,
                 }));
 
-            var controller = new ProductController(productService.Object);
+            var controller = new ProductController(_productService.Object);
 
             //Act
             var response = await controller.Get(id);
@@ -97,15 +96,14 @@ namespace FinalTask.UnitTests
         }
 
         [Fact]
-        public async Task GetProduct_ShouldReturnModelNotFoundException_WithNotValidId()
+        public async Task GetProduct_WithNotValidId_ShouldReturnModelNotFoundException()
         {
             //Arrange
             var id = 4;
-            var productService = new Mock<IProductService>();
-            productService.Setup(c => c.GetProductByIdAsync(id))
+            _productService.Setup(c => c.GetProductByIdAsync(id))
                 .Throws<EntityNotFoundException>();
 
-            var controller = new ProductController(productService.Object);
+            var controller = new ProductController(_productService.Object);
 
             //Act
             Func<Task> response = async () => await controller.Get(id);
@@ -115,13 +113,12 @@ namespace FinalTask.UnitTests
         }
 
         [Fact]
-        public async Task CreateProduct_ShouldReturnOk_WithValidObject()
+        public async Task CreateProduct_WithValidObject_ShouldReturnOk()
         {
             // Arrange
-            var productService = new Mock<IProductService>();
-            productService.Setup(r => r.CreateProductAsync(It.IsAny<ProductModel>()));
+            _productService.Setup(r => r.CreateProductAsync(It.IsAny<ProductModel>()));
             var request = new ProductModel();
-            var controller = new ProductController(productService.Object);
+            var controller = new ProductController(_productService.Object);
 
             // Act
             var response = await controller.CreateProduct(request);
@@ -131,7 +128,7 @@ namespace FinalTask.UnitTests
         }
 
         [Fact]
-        public async Task CreateProduct_ShouldReturnArgumentException_WithInvalidObject()
+        public async Task CreateProduct_WithInvalidObject_ShouldReturnArgumentException()
         {
             // Arrange
             var controller = new ProductController(null);
@@ -146,24 +143,29 @@ namespace FinalTask.UnitTests
         }
 
         [Fact]
-        public async Task UpdateProduct_ShouldReturnNoContent_WithValidObject()
+        public async Task UpdateProduct_WithValidObject_ShouldReturnNoContent()
         {
             // Arrange
-            var productService = new Mock<IProductService>();
-            productService.Setup(c => c.UpdateProductAsync(It.IsAny<int>(), It.IsAny<ProductModel>()));
-            var controller = new ProductController(productService.Object);
+            var product = new ProductModel
+            {
+                Name = "Test123",
+                Description = "Test",
+                Price = 1111
+            };
+            _productService.Setup(c => c.UpdateProductAsync(1, product));
+            var controller = new ProductController(_productService.Object);
 
             // Act
-            var response = await controller.UpdateProduct(1, new ProductModel());
+            var response = await controller.UpdateProduct(1, product);
 
             // Assert
             Assert.IsType<NoContentResult>(response);
-            productService.Verify(r =>
-                r.UpdateProductAsync(It.IsAny<int>(), It.IsAny<ProductModel>()));
+            _productService.Verify(r =>
+                r.UpdateProductAsync(1, product));
         }
 
         [Fact]
-        public async Task UpdateProduct_ShouldThrowArgumentException_WithInvalidObject()
+        public async Task UpdateProduct_WithInvalidObject_ShouldThrowArgumentException()
         {
             // Arrange
             var controller = new ProductController(null);
@@ -177,14 +179,13 @@ namespace FinalTask.UnitTests
         }
 
         [Fact]
-        public async Task UpdateProduct_ShouldThrowModelNotFoundException_WithInvalidId()
+        public async Task UpdateProduct_WithInvalidId_ShouldThrowModelNotFoundException()
         {
             // Arrange
-            var productService = new Mock<IProductService>();
-            productService.Setup(r => r.UpdateProductAsync(It.IsAny<int>(), It.IsAny<ProductModel>()))
+            _productService.Setup(r => r.UpdateProductAsync(It.IsAny<int>(), It.IsAny<ProductModel>()))
                 .Throws<EntityNotFoundException>();
 
-            var controller = new ProductController(productService.Object);
+            var controller = new ProductController(_productService.Object);
 
             // Act
             Func<Task> act = async () => await controller.UpdateProduct(5, new ProductModel());
@@ -194,31 +195,29 @@ namespace FinalTask.UnitTests
         }
 
         [Fact]
-        public async Task DeleteProduct_ShouldReturnNoContent_WithValidId()
+        public async Task DeleteProduct_WithValidId_ShouldReturnNoContent()
         {
             // Arrange
-            var productService = new Mock<IProductService>();
-            productService.Setup(r => r.DeleteProductAsync(It.IsAny<int>()));
-            var controller = new ProductController(productService.Object);
+            _productService.Setup(r => r.DeleteProductAsync(It.IsAny<int>()));
+            var controller = new ProductController(_productService.Object);
 
             // Act
             var response = await controller.Delete(1);
 
             // Assert
             Assert.IsType<NoContentResult>(response);
-            productService.Verify(r =>
+            _productService.Verify(r =>
                 r.DeleteProductAsync(It.IsAny<int>()));
         }
 
         [Fact]
-        public async Task DeletePrduct_ShouldReturnModelNotFoundException_WithInvalidId()
+        public async Task DeletePrduct_WithInvalidId_ShouldReturnModelNotFoundException()
         {
             // Arrange
-            var productService = new Mock<IProductService>();
-            productService.Setup(r => r.DeleteProductAsync(It.IsAny<int>()))
+            _productService.Setup(r => r.DeleteProductAsync(It.IsAny<int>()))
                 .Throws<EntityNotFoundException>();
 
-            var controller = new ProductController(productService.Object);
+            var controller = new ProductController(_productService.Object);
 
             // Act
             Func<Task> act = async () => await controller.Delete(6);

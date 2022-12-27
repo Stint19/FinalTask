@@ -1,14 +1,31 @@
-﻿using FinalTask.Application.Dtos;
+﻿using AutoMapper;
+using FinalTask.Application.Dtos;
 using FinalTask.Application.Exceptions;
+using FinalTask.Application.Mapper;
 using FinalTask.Application.Services;
 using FinalTask.Domain.Models;
 using FinalTask.Infrastucture.Contracts;
+using FluentAssertions;
 using Moq;
 
 namespace FinalTask.UnitTests
 {
     public class ProductServiceTests
     {
+        private IMapper _mapper;
+        private readonly Mock<IProductRepository> _productRepository;
+
+        public ProductServiceTests()
+        {
+            _productRepository = new Mock<IProductRepository>();
+            var mappingConfiguration = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MapProfiles());
+            });
+            _mapper = mappingConfiguration.CreateMapper();
+
+        }
+
         private List<Product> GetFakeProducts()
         {
             return new List<Product>
@@ -31,15 +48,13 @@ namespace FinalTask.UnitTests
         }
 
         [Fact]
-        public async Task GetProductListAsync_ShouldReturnProductList_WithData()
+        public async Task GetProductListAsync_WithData_ShouldReturnProductList()
         {
             // Arrange
             var productList = GetFakeProducts();
-
-            var productRepository = new Mock<IProductRepository>();
-            productRepository.Setup(r => r.GetAllAsync())
+            _productRepository.Setup(r => r.GetAllAsync())
                     .Returns(Task.FromResult(productList));
-            var productService = new ProductService(productRepository.Object);
+            var productService = new ProductService(_productRepository.Object, _mapper);
 
             // Act
             var result = await productService.GetProductListAsync();
@@ -47,16 +62,15 @@ namespace FinalTask.UnitTests
             // Assert
             Assert.IsType<List<Product>>(result);
             Assert.Equal(productList.Count, result.Count);
+            Assert.Equal(result, productList);
         }
 
         [Fact]
-        public async Task GetProductAsync_ShouldReturnProduct_WithValidId()
+        public async Task GetProductAsync_WithValidId_ShouldReturnProduct()
         {
             // Arrange
             int id = 1;
-
-            var productRepository = new Mock<IProductRepository>();
-            productRepository.Setup(r => r.GetByIdAsync(id))
+            _productRepository.Setup(r => r.GetByIdAsync(id))
                     .Returns(Task.FromResult(new Product() {
                         Id = id,
                         Name = "Test",
@@ -64,7 +78,7 @@ namespace FinalTask.UnitTests
                         Price = 123
                     }));
 
-            var productService = new ProductService(productRepository.Object);
+            var productService = new ProductService(_productRepository.Object, _mapper);
 
             // Act
             var result = await productService.GetProductByIdAsync(id);
@@ -77,38 +91,68 @@ namespace FinalTask.UnitTests
         }
 
         [Fact]
-        public void GetProductAsync_ShouldThrowModelNotFoundException_WithInvalidId()
+        public void GetProductAsync_WithInvalidId_ShouldThrowModelNotFoundException()
         {
             // Arrange
-            var productRepository = new Mock<IProductRepository>();
-            productRepository.Setup(r => r.GetByIdAsync(It.IsAny<int>()))
+            _productRepository.Setup(r => r.GetByIdAsync(It.IsAny<int>()))
                     .Returns(Task.FromResult<Product>(null));
-            var problemService = new ProductService(productRepository.Object);
+            var productService = new ProductService(_productRepository.Object, _mapper);
 
             // Act
-            Func<Task> response = async () => await problemService.GetProductByIdAsync(6);
+            Func<Task> response = async () => await productService.GetProductByIdAsync(6);
 
             // Act & Assert
-            Assert.ThrowsAsync<ModelNotFoundException>(response);
+            Assert.ThrowsAsync<EntityNotFoundException>(response);
         }
 
+
+
         [Fact]
-        public async Task CreateProductAsync_ShouldReturnWithoutException_WithValidId()
+        public async Task CreateProductAsync_WithValidData_ShouldReturnId()
         {
             // Arrange
-            var productRepository = new Mock<IProductRepository>();
-            productRepository.Setup(c => c.CreateAsync(It.IsAny<Product>()));
-            var productService = new ProductService(productRepository.Object);
+            var productModel = new ProductModel
+            {
+                Name = "Tes2323t",
+                Description = "Te23st",
+                Price = 1111
+            };
+            _productRepository.Setup(r => r.GetByNameAsync(productModel.Name));
+            _productRepository.Setup(r => r.CreateAsync(It.IsAny<Product>()))
+                .ReturnsAsync(1);
+            var productService = new ProductService(_productRepository.Object, _mapper);
 
             // Act
-            var result = Record.ExceptionAsync(async () => await productService.CreateProductAsync(new ProductModel()));
+            var result = await productService.CreateProductAsync(productModel);
 
             // Assert
-            Assert.Null(result.Result);
+            Assert.Equal(result, 1);
         }
 
         [Fact]
-        public void UpdateProductAsync_ShouldUpdateProduct_WithValidId()
+        public async Task CreateProductAsync_WithAlreadyExistEntity_ShouldReturnArgumentException()
+        {
+            // Arrange
+            var productModel = new ProductModel
+            {
+                Name = "Tes2323t",
+                Description = "Te23st",
+                Price = 1111
+            };
+            _productRepository.Setup(r => r.GetByNameAsync(productModel.Name))
+                .ReturnsAsync(new Product());
+            _productRepository.Setup(r => r.CreateAsync(It.IsAny<Product>()))
+                .ReturnsAsync(1);
+            var productService = new ProductService(_productRepository.Object, _mapper);
+
+            // Act
+            // Assert
+            Assert.ThrowsAsync<ArgumentException>(async () =>
+                await productService.CreateProductAsync(productModel));
+        }
+
+        [Fact]
+        public void UpdateProductAsync_WithValidId_ShouldUpdateProduct()
         {
             // Arrange
             var id = 1;
@@ -129,12 +173,11 @@ namespace FinalTask.UnitTests
                 Price = 2
             };
 
-            var productRepository = new Mock<IProductRepository>();
-            productRepository.Setup(r => r.GetByIdAsync(id))
+            _productRepository.Setup(r => r.GetByIdAsync(id))
                     .Returns(Task.FromResult(product));
-            productRepository.Setup(r => r.UpdateAsync(It.IsAny<Product>()));
+            _productRepository.Setup(r => r.UpdateAsync(It.IsAny<Product>()));
 
-            var productService = new ProductService(productRepository.Object);
+            var productService = new ProductService(_productRepository.Object, _mapper);
 
             // Act
             var result = productService.UpdateProductAsync(id, productModel);
@@ -149,33 +192,32 @@ namespace FinalTask.UnitTests
         }
 
         [Fact]
-        public void UpdateProductAsync_ShouldReturnModelNotFoundException_WithInvalidProductId()
+        public void UpdateProductAsync_WithInvalidProductId_ShouldReturnEntityNotFoundException()
         {
             // Arrange
-            var productRepository = new Mock<IProductRepository>();
-            productRepository.Setup(r => r.GetByIdAsync(It.IsAny<int>()))
+            _productRepository.Setup(r => r.GetByIdAsync(It.IsAny<int>()))
                     .Returns(Task.FromResult<Product>(null));
-            productRepository.Setup(r => r.UpdateAsync(It.IsAny<Product>()))
+            _productRepository.Setup(r => r.UpdateAsync(It.IsAny<Product>()))
                 .Verifiable();
 
-            var productService = new ProductService(productRepository.Object);
+            var productService = new ProductService(_productRepository.Object, _mapper);
 
             // Act & Assert
-            Assert.ThrowsAsync<ModelNotFoundException>(async () =>
+            Assert.ThrowsAsync<EntityNotFoundException>(async () =>
                 await productService.UpdateProductAsync(3, new ProductModel()));
-            Assert.Throws<MockException>(() => productRepository.Verify());
+            _productRepository.Verify(service => service.UpdateAsync(It.IsAny<Product>()), Times.Never);
+            
         }
 
         [Fact]
-        public void DeleteProductAsync_ShouldReturnWithoutException_WithValidId()
+        public void DeleteProductAsync_WithValidId_ShouldReturnWithoutException()
         {
             // Arrange
             int id = 1;
-            var productRepository = new Mock<IProductRepository>();
-            productRepository.Setup(r => r.GetByIdAsync(id))
+            _productRepository.Setup(r => r.GetByIdAsync(id))
                     .Returns(Task.FromResult(new Product() { Id = id }));
-            productRepository.Setup(r => r.DeleteAsync(It.IsAny<Product>()));
-            var productService = new ProductService(productRepository.Object);
+            _productRepository.Setup(r => r.DeleteAsync(It.IsAny<Product>()));
+            var productService = new ProductService(_productRepository.Object, _mapper);
 
             // Act
             var result = productService.DeleteProductAsync(id);
@@ -185,18 +227,17 @@ namespace FinalTask.UnitTests
         }
 
         [Fact]
-        public void DeleteProductAsync_ShouldReturnModelNotFoundException_WithInvalidId()
+        public void DeleteProductAsync_WithInvalidId_ShouldReturnModelNotFoundException()
         {
             // Arrange
-            var productRepository = new Mock<IProductRepository>();
-            productRepository.Setup(r => r.GetByIdAsync(It.IsAny<int>()))
+            _productRepository.Setup(r => r.GetByIdAsync(It.IsAny<int>()))
                     .Returns(Task.FromResult<Product>(null));
-            productRepository.Setup(r => r.DeleteAsync(It.IsAny<Product>()));
+            _productRepository.Setup(r => r.DeleteAsync(It.IsAny<Product>()));
 
-            var productService = new ProductService(productRepository.Object);
+            var productService = new ProductService(_productRepository.Object, _mapper);
 
             // Act & Assert
-            Assert.ThrowsAsync<ModelNotFoundException>(async () =>
+            Assert.ThrowsAsync<EntityNotFoundException>(async () =>
                 await productService.DeleteProductAsync(7));
         }
     }
