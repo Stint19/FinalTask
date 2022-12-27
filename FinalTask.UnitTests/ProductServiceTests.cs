@@ -1,5 +1,5 @@
 ﻿using FinalTask.Application.Dtos;
-using FinalTask.Application.Exceprions;
+using FinalTask.Application.Exceptions;
 using FinalTask.Application.Services;
 using FinalTask.Domain.Models;
 using FinalTask.Infrastucture.Contracts;

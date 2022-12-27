@@ -10,6 +10,6 @@ namespace FinalTask.Infrastucture.Contracts
         Task<int> CreateAsync(Product product);
         Task UpdateAsync(Product product);
         Task DeleteAsync(Product product);
-
+        Task SaveAsync();
     }
 }

@@ -16,20 +16,17 @@ namespace FinalTask.Infrastucture.Repositories
         public async Task<int> CreateAsync(Product item)
         {
             await _appDbContext.Products.AddAsync(item);
-            await _appDbContext.SaveChangesAsync();
             return item.Id;
         }
 
         public async Task UpdateAsync(Product item)
         {
             _appDbContext.Products.Update(item);
-            await _appDbContext.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(Product item)
         {
             _appDbContext.Products.Remove(item);
-            await _appDbContext.SaveChangesAsync();
         }
 
         public async Task<List<Product>> GetAllAsync()
@@ -47,6 +44,11 @@ namespace FinalTask.Infrastucture.Repositories
         public async Task<Product> GetByNameAsync(string name)
         {
             return await _appDbContext.Products.SingleOrDefaultAsync(x => x.Name == name);
+        }
+
+        public async Task SaveAsync()
+        {
+            await _appDbContext.SaveChangesAsync();
         }
     }
 }

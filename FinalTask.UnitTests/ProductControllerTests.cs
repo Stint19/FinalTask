@@ -1,5 +1,5 @@
 ﻿using FinalTask.Application.Dtos;
-using FinalTask.Application.Exceprions;
+using FinalTask.Application.Exceptions;
 using FinalTask.Application.Services.Contracts;
 using FinalTask.Domain.Models;
 using FinalTask.WebApi.Controllers;
@@ -98,7 +98,7 @@ namespace FinalTask.UnitTests
             var id = 4;
             var productService = new Mock<IProductService>();
             productService.Setup(c => c.GetProductByIdAsync(id))
-                .Throws<ModelNotFoundException>();
+                .Throws<EntityNotFoundException>();
 
             var controller = new ProductController(productService.Object);
 
@@ -106,7 +106,7 @@ namespace FinalTask.UnitTests
             Func<Task> response = async () => await controller.Get(id);
 
             //Assert
-            await response.Should().ThrowAsync<ModelNotFoundException>();
+            await response.Should().ThrowAsync<EntityNotFoundException>();
         }
 
         [Fact]
@@ -177,7 +177,7 @@ namespace FinalTask.UnitTests
             // Arrange
             var productService = new Mock<IProductService>();
             productService.Setup(r => r.UpdateProductAsync(It.IsAny<int>(), It.IsAny<ProductModel>()))
-                .Throws<ModelNotFoundException>();
+                .Throws<EntityNotFoundException>();
 
             var controller = new ProductController(productService.Object);
 
@@ -185,7 +185,7 @@ namespace FinalTask.UnitTests
             Func<Task> act = async () => await controller.UpdateProduct(5, new ProductModel());
 
             // Assert
-            await act.Should().ThrowAsync<ModelNotFoundException>();
+            await act.Should().ThrowAsync<EntityNotFoundException>();
         }
 
         [Fact]

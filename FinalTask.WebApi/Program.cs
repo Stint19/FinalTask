@@ -1,3 +1,6 @@
+using FinalTask.Application.Dtos;
+using FinalTask.Application.Mapper;
+using FinalTask.Domain.Models;
 using FinalTask.Domain.Models.Identity;
 using FinalTask.Infrastucture.Data;
 using FinalTask.WebApi.Extensions;
@@ -24,6 +27,8 @@ builder.Services.AddIdentity<AppUser, IdentityRole>()
 builder.Services.AddControllers();
 builder.Services.ConfigureJwtSwagger();
 builder.Services.JwtConfigure(builder.Configuration);
+builder.Services.AddAutoMapper(typeof(MapProfiles));
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

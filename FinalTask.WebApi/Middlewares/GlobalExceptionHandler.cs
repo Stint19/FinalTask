@@ -1,4 +1,4 @@
-﻿using FinalTask.Application.Exceprions;
+﻿using FinalTask.Application.Exceptions;
 using Newtonsoft.Json;
 using System.Net;
 
@@ -27,7 +27,7 @@ namespace FinalTask.WebApi.Middlewares
             {
                 await HandleExceptionAsync(context, ex.Message, HttpStatusCode.BadRequest);
             }
-            catch (InvalidConfigExceprion ex)
+            catch (InvalidConfigurationException ex)
             {
                 await HandleExceptionAsync(context, ex.Message, HttpStatusCode.BadRequest);
             }
@@ -35,7 +35,7 @@ namespace FinalTask.WebApi.Middlewares
             {
                 await HandleExceptionAsync(context, ex.Message, HttpStatusCode.BadRequest);
             }
-            catch (ModelNotFoundException ex)
+            catch (EntityNotFoundException ex)
             {
                 await HandleExceptionAsync(context, ex.Message, HttpStatusCode.NotFound);
             }

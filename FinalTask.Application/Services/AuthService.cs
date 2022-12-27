@@ -1,5 +1,5 @@
 ﻿using FinalTask.Application.Dtos;
-using FinalTask.Application.Exceprions;
+using FinalTask.Application.Exceptions;
 using FinalTask.Application.Services.Contracts;
 using FinalTask.Domain.Models.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -53,7 +53,7 @@ namespace FinalTask.Application.Services
 
             if(!int.TryParse(_configuration["JWT:RefreshTokenValidityInDays"], out int refreshTokenValidityInDays))
             {
-                throw new InvalidConfigExceprion();
+                throw new InvalidConfigurationException();
             }
 
             user.RefreshToken = refreshToken;
@@ -154,7 +154,7 @@ namespace FinalTask.Application.Services
             var user = await _userManager.FindByNameAsync(username);
             if (user == null)
             {
-                throw new ModelNotFoundException();
+                throw new EntityNotFoundException(username);
             }
 
             user.RefreshToken = null;

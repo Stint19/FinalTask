@@ -1,5 +1,6 @@
-﻿using FinalTask.Application.Dtos;
-using FinalTask.Application.Exceprions;
+﻿using AutoMapper;
+using FinalTask.Application.Dtos;
+using FinalTask.Application.Exceptions;
 using FinalTask.Application.Services.Contracts;
 using FinalTask.Domain.Models;
 using FinalTask.Infrastucture.Contracts;
@@ -9,42 +10,48 @@ namespace FinalTask.Application.Services
     public class ProductService : IProductService
     {
         private readonly IProductRepository _productRepository;
+        private readonly IMapper _mapper;
 
-        public ProductService(IProductRepository productRepository)
+        public ProductService(IProductRepository productRepository, IMapper mapper)
         {
+            _mapper = mapper;    
             _productRepository= productRepository;
         }
 
-        public async Task<int> CreateProductAsync(ProductModel product)
+        public async Task<int> CreateProductAsync(ProductModel productModel)
         {
-            await CheckIfExistsAsync(product);
-            var item = new Product
+            var product = await _productRepository.GetByNameAsync(productModel.Name);
+            if (product != null)
             {
-                Name = product.Name,
-                Description = product.Description,
-                Price = product.Price
-            };
+                throw new ArgumentException("This product already exist.");
+            }
 
-            return await _productRepository.CreateAsync(item);
+            var item = _mapper.Map<Product>(productModel);
+            var creatingItemId = await _productRepository.CreateAsync(item);
+            await _productRepository.SaveAsync();
+            Task.WaitAll();
+            return creatingItemId;
         }
 
         public async Task DeleteProductAsync(int id)
         {
             var item = await _productRepository.GetByIdAsync(id);
-            await CheckIfFound(id, item);
+            if (item is null)
+            {
+                throw new EntityNotFoundException("Product", id);
+            }
             await _productRepository.DeleteAsync(item);
+            await _productRepository.SaveAsync();
         }
 
         public async Task<ProductModel> GetProductByIdAsync(int productId)
         {
             var item = await _productRepository.GetByIdAsync(productId);
-            await CheckIfFound(productId, item);
-            return new ProductModel
+            if (item is null)
             {
-                Name = item.Name,
-                Description = item.Description,
-                Price = item.Price
-            };
+                throw new EntityNotFoundException("Product", productId);
+            }
+            return _mapper.Map<ProductModel>(item);
         }
 
         public async Task<List<Product>> GetProductListAsync()
@@ -55,30 +62,22 @@ namespace FinalTask.Application.Services
 
         public async Task UpdateProductAsync(int id, ProductModel product)
         {
-            await CheckIfExistsAsync(product);
-            var item = await _productRepository.GetByIdAsync(id);
-            await CheckIfFound(id, item);
-            item.Name = product.Name;
-            item.Description = product.Description;
-            item.Price = product.Price;
-            await _productRepository.UpdateAsync(item);
-        }
-
-        private async Task CheckIfFound(int id, Product product)
-        {
-            if (product is null)
-            {
-                throw new ModelNotFoundException("Product", id);
-            }
-        }
-
-        private async Task CheckIfExistsAsync(ProductModel model)
-        {
-            var product = await _productRepository.GetByNameAsync(model.Name);
-            if (product != null)
+            var item = await _productRepository.GetByNameAsync(product.Name);
+            if (item != null)
             {
                 throw new ArgumentException("This product already exist.");
             }
+
+            var existingItem = await _productRepository.GetByIdAsync(id);
+            if (existingItem is null)
+            {
+                throw new EntityNotFoundException("Product", id);
+            }
+
+            _mapper.Map(product, existingItem);
+
+            await _productRepository.UpdateAsync(existingItem);
+            await _productRepository.SaveAsync();
         }
     }
 }

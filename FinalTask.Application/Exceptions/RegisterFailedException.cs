@@ -1,4 +1,4 @@
-﻿namespace FinalTask.Application.Exceprions
+﻿namespace FinalTask.Application.Exceptions
 {
     public class RegisterFailedException : Exception
     {
