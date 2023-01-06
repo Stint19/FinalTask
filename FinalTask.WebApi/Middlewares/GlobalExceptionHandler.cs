@@ -43,6 +43,10 @@ namespace FinalTask.WebApi.Middlewares
             {
                 await HandleExceptionAsync(context, ex.Message, HttpStatusCode.BadRequest);
             }
+            catch (EntityAlreadyExistException ex)
+            {
+                await HandleExceptionAsync(context, ex.Message, HttpStatusCode.Conflict);
+            }
             catch (Exception ex)
             {
                 await HandleExceptionAsync(context, ex.Message, HttpStatusCode.InternalServerError);

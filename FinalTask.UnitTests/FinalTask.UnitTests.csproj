@@ -24,7 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FinalTask.Application\FinalTask.Application.csproj" />
     <ProjectReference Include="..\FinalTask.WebApi\FinalTask.WebApi.csproj" />
   </ItemGroup>
 

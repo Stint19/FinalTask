@@ -53,7 +53,7 @@ namespace FinalTask.UnitTests
             // Arrange
             var productList = GetFakeProducts();
             _productRepository.Setup(r => r.GetAllAsync())
-                    .Returns(Task.FromResult(productList));
+                    .ReturnsAsync(productList);
             var productService = new ProductService(_productRepository.Object, _mapper);
 
             // Act
@@ -71,12 +71,12 @@ namespace FinalTask.UnitTests
             // Arrange
             int id = 1;
             _productRepository.Setup(r => r.GetByIdAsync(id))
-                    .Returns(Task.FromResult(new Product() {
+                    .ReturnsAsync(new Product() {
                         Id = id,
                         Name = "Test",
                         Description = "Test",
                         Price = 123
-                    }));
+                    });
 
             var productService = new ProductService(_productRepository.Object, _mapper);
 
@@ -95,7 +95,7 @@ namespace FinalTask.UnitTests
         {
             // Arrange
             _productRepository.Setup(r => r.GetByIdAsync(It.IsAny<int>()))
-                    .Returns(Task.FromResult<Product>(null));
+                    .ReturnsAsync((Product)null);
             var productService = new ProductService(_productRepository.Object, _mapper);
 
             // Act
@@ -118,19 +118,18 @@ namespace FinalTask.UnitTests
                 Price = 1111
             };
             _productRepository.Setup(r => r.GetByNameAsync(productModel.Name));
-            _productRepository.Setup(r => r.CreateAsync(It.IsAny<Product>()))
-                .ReturnsAsync(1);
+            _productRepository.Setup(r => r.CreateAsync(It.IsAny<Product>()));
             var productService = new ProductService(_productRepository.Object, _mapper);
 
             // Act
             var result = await productService.CreateProductAsync(productModel);
 
             // Assert
-            Assert.Equal(result, 1);
+            Assert.Equal(result, 0);
         }
 
         [Fact]
-        public async Task CreateProductAsync_WithAlreadyExistEntity_ShouldReturnArgumentException()
+        public async Task CreateProductAsync_WithAlreadyExistEntity_ShouldThrowArgumentException()
         {
             // Arrange
             var productModel = new ProductModel
@@ -141,8 +140,7 @@ namespace FinalTask.UnitTests
             };
             _productRepository.Setup(r => r.GetByNameAsync(productModel.Name))
                 .ReturnsAsync(new Product());
-            _productRepository.Setup(r => r.CreateAsync(It.IsAny<Product>()))
-                .ReturnsAsync(1);
+            _productRepository.Setup(r => r.CreateAsync(It.IsAny<Product>()));
             var productService = new ProductService(_productRepository.Object, _mapper);
 
             // Act
@@ -173,8 +171,7 @@ namespace FinalTask.UnitTests
                 Price = 2
             };
 
-            _productRepository.Setup(r => r.GetByIdAsync(id))
-                    .Returns(Task.FromResult(product));
+            _productRepository.Setup(r => r.GetByIdAsync(id)).ReturnsAsync(product);
             _productRepository.Setup(r => r.UpdateAsync(It.IsAny<Product>()));
 
             var productService = new ProductService(_productRepository.Object, _mapper);
@@ -192,13 +189,12 @@ namespace FinalTask.UnitTests
         }
 
         [Fact]
-        public void UpdateProductAsync_WithInvalidProductId_ShouldReturnEntityNotFoundException()
+        public void UpdateProductAsync_WithInvalidProductId_ShouldThrowEntityNotFoundException()
         {
             // Arrange
             _productRepository.Setup(r => r.GetByIdAsync(It.IsAny<int>()))
-                    .Returns(Task.FromResult<Product>(null));
-            _productRepository.Setup(r => r.UpdateAsync(It.IsAny<Product>()))
-                .Verifiable();
+                    .ReturnsAsync((Product)null);
+            _productRepository.Setup(r => r.UpdateAsync(It.IsAny<Product>()));
 
             var productService = new ProductService(_productRepository.Object, _mapper);
 
@@ -210,12 +206,12 @@ namespace FinalTask.UnitTests
         }
 
         [Fact]
-        public void DeleteProductAsync_WithValidId_ShouldReturnWithoutException()
+        public void DeleteProductAsync_WithValidId_ShouldDeleteProduct()
         {
             // Arrange
             int id = 1;
             _productRepository.Setup(r => r.GetByIdAsync(id))
-                    .Returns(Task.FromResult(new Product() { Id = id }));
+                    .ReturnsAsync(new Product() { Id = id });
             _productRepository.Setup(r => r.DeleteAsync(It.IsAny<Product>()));
             var productService = new ProductService(_productRepository.Object, _mapper);
 
@@ -227,11 +223,11 @@ namespace FinalTask.UnitTests
         }
 
         [Fact]
-        public void DeleteProductAsync_WithInvalidId_ShouldReturnModelNotFoundException()
+        public void DeleteProductAsync_WithInvalidId_ShouldThrowModelNotFoundException()
         {
             // Arrange
             _productRepository.Setup(r => r.GetByIdAsync(It.IsAny<int>()))
-                    .Returns(Task.FromResult<Product>(null));
+                    .ReturnsAsync((Product)null);
             _productRepository.Setup(r => r.DeleteAsync(It.IsAny<Product>()));
 
             var productService = new ProductService(_productRepository.Object, _mapper);

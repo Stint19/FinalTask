@@ -23,14 +23,14 @@ namespace FinalTask.Application.Services
             var product = await _productRepository.GetByNameAsync(productModel.Name);
             if (product != null)
             {
-                throw new ArgumentException("This product already exist.");
+                throw new EntityAlreadyExistException(product.Name, product.Id);
             }
 
             var item = _mapper.Map<Product>(productModel);
-            var creatingItemId = await _productRepository.CreateAsync(item);
+            await _productRepository.CreateAsync(item);
             await _productRepository.SaveAsync();
 
-            return creatingItemId;
+            return item.Id;
         }
 
         public async Task DeleteProductAsync(int id)
@@ -47,7 +47,7 @@ namespace FinalTask.Application.Services
         public async Task<ProductModel> GetProductByIdAsync(int productId)
         {
             var item = await _productRepository.GetByIdAsync(productId);
-            if (item is null)
+            if (item == null)
             {
                 throw new EntityNotFoundException("Product", productId);
             }
@@ -65,7 +65,7 @@ namespace FinalTask.Application.Services
             var item = await _productRepository.GetByNameAsync(product.Name);
             if (item != null)
             {
-                throw new ArgumentException("This product already exist.");
+                throw new EntityAlreadyExistException(item.Name, item.Id);
             }
 
             var existingItem = await _productRepository.GetByIdAsync(id);

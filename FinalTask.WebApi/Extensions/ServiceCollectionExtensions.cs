@@ -1,12 +1,28 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using FinalTask.Application.Services;
+using FinalTask.Application.Services.Contracts;
+using FinalTask.Infrastucture.Contracts;
+using FinalTask.Infrastucture.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 
 namespace FinalTask.WebApi.Extensions
 {
-    public static class JwtExtensions
+    public static class ServiceCollectionExtensions
     {
+        public static void RegisterRepositories(this IServiceCollection services)
+        {
+            services.AddScoped<IProductRepository, ProductRepository>();
+        }
+
+        public static void RegisterServices(this IServiceCollection services)
+        {
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<ITokenService, TokenService>();
+        }
+
         public static void JwtConfigure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddAuthentication(options =>
@@ -48,8 +64,8 @@ namespace FinalTask.WebApi.Extensions
                     Scheme = "Bearer",
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
-                    Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] " + 
-                    "and then your token in the text input below.\r\n\r\nExample:" + 
+                    Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] " +
+                    "and then your token in the text input below.\r\n\r\nExample:" +
                     " \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiQWRtaW4iLCJqdGkiOiJmMjY3MTRkNy0xN2MxLTQzNGEtOTA4OS1iYmMwMDVmOWUzZDgiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOlsiVXNlciIsIkFkbWluIl0sImV4cCI6MTY3MjE2Njc1NSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo3MTgyIiwiYXVkIjoiaHR0cDovL2xvY2FsaG9zdDo3MTgyIn0.phIdUwUegom_ghAu53EyR2FrmIK2bEP-XRk0v6peROE\"",
                 });
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement {

@@ -9,8 +9,7 @@ namespace FinalTask.Application.Mapper
         public MapProfiles()
         {
             CreateMap<ProductModel, Product>()
-                .ForMember(c => c.Id,
-                opt => opt.Ignore());
+                .ForMember(c => c.Id, opt => opt.Ignore());
             CreateMap<Product, ProductModel>();
         }
     }
