@@ -36,7 +36,7 @@ namespace FinalTask.Application.Services
         public async Task DeleteProductAsync(int id)
         {
             var item = await _productRepository.GetByIdAsync(id);
-            if (item is null)
+            if (item == null)
             {
                 throw new EntityNotFoundException("Product", id);
             }

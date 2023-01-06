@@ -20,8 +20,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FinalTask.Application\FinalTask.Application.csproj" />
-    <ProjectReference Include="..\FinalTask.Domain\FinalTask.Domain.csproj" />
-    <ProjectReference Include="..\FinalTask.Infrastucture\FinalTask.Infrastucture.csproj" />
   </ItemGroup>
 
 </Project>
